@@ -66,13 +66,20 @@ public class Account {
 
     // Méthode pour soustraire de l'argent
     public int removeMoney(int amount){
-        return this.balance -= amount;
+        int solde = this.balance;
+        if((solde -= amount) < this.overdraftAuthorization){
+            System.out.println("Opération non autorisée votre découvert autorisé est de : " + this.overdraftAuthorization);
+        }else{
+            solde -= amount;
+        }
+        return solde;  
     }
 
     // Méthode de transfert d'argent
-    public void transfer(Account otherAccount, int amount){      
-        if (this.balance >= amount){
-            this.balance -= amount;
+    public void transfer(Account otherAccount, int amount){ 
+        int solde = this.balance;   
+        if (solde >= amount & this.balance < this.overdraftAuthorization){
+            solde -= amount;
             otherAccount.setBalance(otherAccount.getBalance() + amount);
         } else {
             System.out.println("Solde insuffisant pour effectuer le transfert.");
